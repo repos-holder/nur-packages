@@ -17,5 +17,6 @@
   example-package = pkgs.callPackage ./pkgs/example-package { };
   # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
   # ...
+  k380-function-keys-conf = pkgs.callPackage ./pkgs/k380-function-keys-conf { };
 }
 
