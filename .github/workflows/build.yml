@@ -17,7 +17,7 @@ jobs:
         # The repo name as used in
         # https://github.com/nix-community/NUR/blob/master/repos.json
         nurRepo:
-          - <YOUR_REPO_NAME>
+          - dukzcry
         # Set this to cache your build results in cachix for faster builds
         # in CI and for everyone who uses your cache.
         #
@@ -27,11 +27,11 @@ jobs:
         # For this to work, you also need to set the CACHIX_SIGNING_KEY secret
         # in your repository settings in Github found at https://github.com/<your_githubname>/nur-packages/settings/secrets
         cachixName:
-          - <YOUR_CACHIX_NAME>
+          - dukzcry
         nixPath:
-          - nixpkgs=channel:nixos-unstable
-          - nixpkgs=channel:nixpkgs-unstable
-          - nixpkgs=channel:nixos-20.03
+          #- nixpkgs=channel:nixos-unstable
+          #- nixpkgs=channel:nixpkgs-unstable
+          - nixpkgs=channel:nixos-20.09
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
