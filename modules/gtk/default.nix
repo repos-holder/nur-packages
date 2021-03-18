@@ -80,14 +80,6 @@ in
         '';
       };
 
-      gtk3-nocsd = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to enable gtk3-nocsd hack..
-        '';
-      };
-
       font = mkOption {
         type = types.nullOr fontType;
         default = null;
@@ -161,11 +153,6 @@ in
 
       # TODO: support Wayland/XSettings
       # once https://github.com/NixOS/nixpkgs/issues/54150 is fixed
-    })
-
-    (mkIf cfg.gtk3-nocsd {
-      environment.variables.GTK_CSD = "0";
-      environment.variables.LD_PRELOAD = "${pkgs.nur.repos.dukzcry.gtk3-nocsd}/lib/libgtk3-nocsd.so.0";
     })
   ];
 }
