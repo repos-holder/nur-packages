@@ -9,12 +9,12 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  test = 5;
+  unstable = import <nixos-unstable> { config.allowUnfree = true; };
 in {
   # The `lib`, `modules`, and `overlay` names are special
   lib = import ./lib { inherit pkgs; }; # functions
-  modules = import ./modules { inherit test; }; # NixOS modules
-  overlays = import ./overlays { inherit test; }; # nixpkgs overlays
+  modules = import ./modules { inherit unstable; }; # NixOS modules
+  overlays = import ./overlays { inherit unstable; }; # nixpkgs overlays
 
   example-package = pkgs.callPackage ./pkgs/example-package { };
   # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };

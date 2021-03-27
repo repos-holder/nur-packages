@@ -1,8 +1,7 @@
-{ ... }:
+{ unstable }:
 
 self: super:
 let
-  unstable = import <nixos-unstable> { config.allowUnfree = true; };
   config = (super.lib.eval {modules = [(import <nixos-config>)];});
 in {
   haskellPackages = super.haskellPackages.override {
