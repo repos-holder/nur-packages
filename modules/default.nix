@@ -12,5 +12,6 @@
   jack = ./jack;
   pulseaudio = ./pulseaudio;
   bambootracker = ./bambootracker;
+  nvidia = ./nvidia;
 }
 
