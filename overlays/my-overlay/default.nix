@@ -1,16 +1,12 @@
-{ unstable }:
+{ unstable, config }:
 
 self: super:
-let
-  config = (super.lib.eval {modules = [(import <nixos-config>)];});
-in {
+{
   haskellPackages = super.haskellPackages.override {
     overrides = hsSelf: hsSuper: {
       hakyll-images = self.haskell.lib.unmarkBroken hsSuper.hakyll-images;
     };
   };
-  inherit (unstable)
-    bambootracker;
   steam-wrapper = with super; writeShellScriptBin "steam-wrapper" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
@@ -19,17 +15,6 @@ in {
     export LC_ALL=en_US.UTF8
     "$@"
   '';
-  ArchiSteamFarm = with super; (ArchiSteamFarm.override {
-    dotnetCorePackages = dotnetCorePackages // {
-      aspnetcore_3_1 = unstable.dotnetCorePackages.aspnetcore_5_0;
-    };
-  }).overrideAttrs (oldAttrs: rec {
-    version = "5.0.1.2";
-    src = fetchurl {
-      url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-generic.zip";
-      sha256 = "0wczibyv8pwjcd4bxpw70w99ayyii0brfc180cdxp8cznn7p8vxh";
-    };
-  });
   # https://github.com/qutebrowser/qutebrowser/pull/5917
   qutebrowser = unstable.qutebrowser.override {
     python3 = super.python3.override {

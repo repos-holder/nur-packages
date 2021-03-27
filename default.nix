@@ -10,11 +10,13 @@
 
 let
   unstable = import <nixos-unstable> { config.allowUnfree = true; };
+  eval = import <nixpkgs/nixos/lib/eval-config.nix>;
+  config = eval {modules = [(import <nixos-config>)];};
 in {
   # The `lib`, `modules`, and `overlay` names are special
   lib = import ./lib { inherit pkgs; }; # functions
   modules = import ./modules { inherit unstable; }; # NixOS modules
-  overlays = import ./overlays { inherit unstable; }; # nixpkgs overlays
+  overlays = import ./overlays { inherit unstable config; }; # nixpkgs overlays
 
   example-package = pkgs.callPackage ./pkgs/example-package { };
   # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
