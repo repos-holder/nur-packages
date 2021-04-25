@@ -15,12 +15,6 @@ let
     rev = "1a57d96edd156958b12782e8c8b6a374142a7248";
     sha256 = "1qdh457apmw2yxbpi1biwl5x5ygaw158ppff4al8rx7gncgl10rd";
   };
-  unstable2 = import (pkgs.fetchFromGitHub {
-    owner = "nixos";
-    repo = "nixpkgs";
-    rev = "d235056d6d6dcbd2999bd55fd120d831d4df6304";
-    sha256 = "1n0a2wja7w58fkz57hppwhc81lzjzqf251m2xz602j86gh56g3fm";
-  }) {};
   unstable = import unstable_ { config.allowUnfree = true; };
   eval = import <nixpkgs/nixos/lib/eval-config.nix>;
   config = eval {modules = [(import <nixos-config>)];}.config;
@@ -36,6 +30,6 @@ in {
   k380-function-keys-conf = pkgs.callPackage ./pkgs/k380-function-keys-conf { };
   knobkraft-orm = pkgs.callPackage ./pkgs/knobkraft-orm { };
   realrtcw = pkgs.callPackage ./pkgs/realrtcw { };
-  gamescope = unstable2.callPackage ./pkgs/gamescope {};
+  gamescope = pkgs.callPackage ./pkgs/gamescope {};
 }
 
