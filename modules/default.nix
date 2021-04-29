@@ -14,4 +14,5 @@
   monitor = import ./monitor unstable;
   # https://github.com/NixOS/nixpkgs/pull/103531
   acpilight = "${unstable-path}/nixos/modules/hardware/acpilight.nix";
+  job = ./job;
 }
