@@ -28,5 +28,6 @@ in {
   knobkraft-orm = pkgs.callPackage ./pkgs/knobkraft-orm.nix { };
   realrtcw = pkgs.callPackage ./pkgs/realrtcw.nix { };
   gamescope = pkgs.callPackage ./pkgs/gamescope.nix {};
+  re3 = pkgs.callPackage ./pkgs/re3.nix {};
 }
 
