@@ -43,4 +43,11 @@ in stdenv.mkDerivation {
     mkdir -p $out/share/games/re3
     cp -r ../gamefiles $out/share/games/re3
   '';
+  meta = with lib; {
+    description = "GTA III engine";
+    license = licenses.unfree;
+    homepage = src.meta.homepage;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
+  };
 }

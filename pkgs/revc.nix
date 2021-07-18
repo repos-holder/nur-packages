@@ -44,4 +44,11 @@ in stdenv.mkDerivation {
     mkdir -p $out/share/games/revc
     cp -r ../gamefiles $out/share/games/revc
   '';
+  meta = with lib; {
+    description = "GTA Vice City engine";
+    license = licenses.unfree;
+    homepage = src.meta.homepage;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
+  };
 }
