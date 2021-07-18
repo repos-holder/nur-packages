@@ -20,4 +20,9 @@ self: super:
     modprobe iwlwifi iwlmvm
   '';
   inherit (unstable) steam goldendict;
+  bitwig-studio2 = super.bitwig-studio2.override {
+    bitwig-studio1 = super.bitwig-studio1.override {
+      jdk = super.jdk8;
+    };
+  };
 }
