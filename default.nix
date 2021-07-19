@@ -30,5 +30,6 @@ in {
   gamescope = pkgs.callPackage ./pkgs/gamescope.nix {};
   re3 = pkgs.callPackage ./pkgs/re3.nix {};
   revc = pkgs.callPackage ./pkgs/revc.nix {};
+  bitwig-studio3 = pkgs.callPackage ./pkgs/bitwig-studio3.nix {};
 }
 

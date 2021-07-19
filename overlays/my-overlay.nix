@@ -1,7 +1,7 @@
 { unstable, config }:
 
 self: super:
-{
+rec {
   dtrx = super.dtrx.overrideAttrs (oldAttrs: {
     postFixup = ''
       ${oldAttrs.postFixup}
