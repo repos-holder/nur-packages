@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, premake5, glfw, openal, libX11, libXrandr, mpg123, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, premake5, glfw, openal, libX11, libXrandr, mpg123, libsndfile }:
 
 let
   # attempt to call a nil value (global 'staticruntime')  
