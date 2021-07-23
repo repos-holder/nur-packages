@@ -19,5 +19,5 @@ rec {
     sleep 5
     modprobe iwlwifi iwlmvm
   '';
-  inherit (unstable) steam goldendict;
+  inherit (unstable) steam goldendict helio-workstation;
 }
