@@ -1,11 +1,9 @@
-unstable: ddccontrol: { config, lib, pkgs, ... }:
+unstable: { config, lib, pkgs, ... }:
 
 with lib;
 let
   cfg = config.hardware.monitor;
 in {
-  imports = [ ddccontrol ];
-
   options.hardware.monitor = {
     enable = mkEnableOption ''
       Adoptions for monitor
@@ -15,7 +13,7 @@ in {
   config = mkIf cfg.enable {
     services.autorandr.enable = true;
     programs.light.enable = true;
-    services.ddccontrol.enable = true;
-    #hardware.i2c.enable = true;
+    environment.systemPackages = with pkgs; [ ddcutil ];
+    hardware.i2c.enable = true;
   };
 }
