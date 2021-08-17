@@ -20,7 +20,7 @@ rec {
     modprobe iwlwifi iwlmvm
   '';
   # JUST UPDATE RELEASE
-  inherit (unstable) steam goldendict;
+  inherit (unstable) steam goldendict ddccontrol;
   #lmms = super.lmms.overrideAttrs (oldAttrs: rec {
   #  cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DWANT_WEAKJACK=OFF" ];
   #});

@@ -16,6 +16,6 @@ in {
     services.autorandr.enable = true;
     programs.light.enable = true;
     services.ddccontrol.enable = true;
-    #hardware.i2c.enable = true;
+    hardware.i2c.enable = true;
   };
 }
