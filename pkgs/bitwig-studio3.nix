@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    #license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ];
   };
