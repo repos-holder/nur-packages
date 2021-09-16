@@ -9,6 +9,7 @@ rec {
   gtk = ./gtk.nix;
   jack = ./jack.nix;
   pulseaudio = ./pulseaudio.nix;
+  pipewire = ./pipewire.nix;
   bambootracker = ./bambootracker.nix;
   nvidia = ./nvidia.nix;
   job = ./job.nix;
