@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
   '';
   meta = with lib; {
     description = "GTA III engine";
-    #license = licenses.unfree;
+    license = licenses.unfree;
     homepage = src.meta.homepage;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

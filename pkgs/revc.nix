@@ -20,7 +20,7 @@ re3.overrideAttrs (oldAttrs: rec {
   '';
   meta = with lib; {
     description = "GTA Vice City engine";
-    #license = licenses.unfree;
+    license = licenses.unfree;
     homepage = src.meta.homepage;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
