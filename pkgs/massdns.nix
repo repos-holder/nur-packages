@@ -13,9 +13,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildInputs = [ ];
-  nativeBuildInputs = [ ];
-
   meta = with lib; {
     description = "A high-performance DNS stub resolver for bulk lookups and reconnaissance (subdomain enumeration)";
     license = licenses.gpl3;
