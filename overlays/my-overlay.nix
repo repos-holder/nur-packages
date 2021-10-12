@@ -9,7 +9,4 @@ rec {
   #lmms = super.lmms.overrideAttrs (oldAttrs: rec {
   #  cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DWANT_WEAKJACK=OFF" ];
   #});
-  gixy = super.writeShellScriptBin "gixy" ''
-    echo ok
-  '';
 }
