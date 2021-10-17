@@ -32,6 +32,8 @@ in {
       builders-use-substitutes = true
     '';
     nix.distributedBuilds = true;
+
     virtualisation.libvirtd.enable = lib.mkForce false;
+    services.tor.enable = lib.mkForce false;
   };
 }
