@@ -70,12 +70,21 @@ with pkgs.lib; {
       in
         fromNumber (bitOr (toNumber addr) (toNumber (wildcard addr))) pfl;
 
-    nth = addr : n :
+    first = addr :
       let
-        number = toNumber addr + n;
+        number = toNumber (network addr) + 1;
         newaddr = fromNumber number number.prefixLength;
       in newaddr;
-    first = addr : nth addr 1;
+    next = addr :
+      let
+        number = toNumber addr + 1;
+        newaddr = fromNumber number number.prefixLength;
+      in newaddr;
+    prev = addr :
+      let
+        number = toNumber addr - 1;
+        newaddr = fromNumber number number.prefixLength;
+      in newaddr;
     last = addr :
       let
         number = toNumber (broadcast addr) - 1;
