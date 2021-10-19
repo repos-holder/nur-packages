@@ -6,6 +6,15 @@ with pkgs.lib; {
   # hexint = x: hexvals.${toLower x};
   # https://github.com/NixOS/nixpkgs/issues/36299
   ip4 = rec {
+    pow = n : i :
+      if i == 1 then
+        n
+      else
+        if i == 0 then
+          1
+    else
+      n * pow n (i - 1);
+
     ip = a : b : c : d : prefixLength : {
       inherit a b c d prefixLength;
       address = "${toString a}.${toString b}.${toString c}.${toString d}";
@@ -41,18 +50,36 @@ with pkgs.lib; {
     network = addr :
       let
         pfl = addr.prefixLength;
-        pow = n : i :
-          if i == 1 then
-            n
-          else
-            if i == 0 then
-              1
-            else
-              n * pow n (i - 1);
-
         shiftAmount = pow 2 (32 - pfl);
       in
         fromNumber ((toNumber addr) / shiftAmount * shiftAmount) pfl;
+    netmask = addr :
+      let
+        pfl = addr.prefixLength;
+        shiftAmount = pow 2 (32 - pfl);
+      in
+        fromNumber (bitAnd (4294967295 * shiftAmount) 4294967295) pfl;
+    wildcard = addr :
+      let
+        pfl = addr.prefixLength;
+      in
+        fromNumber (bitAnd (bitNot (toNumber (netmask addr))) 4294967295) pfl;
+    broadcast = addr :
+      let
+        pfl = addr.prefixLength;
+      in
+        fromNumber (bitOr (toNumber addr) (toNumber (wildcard addr))) pfl;
+
+    nth = addr : n :
+      let
+        number = toNumber addr + n;
+        newaddr = fromNumber number number.prefixLength;
+      in newaddr;
+    first = addr : nth addr 1;
+    last = addr :
+      let
+        number = toNumber (broadcast addr) - 1;
+        newaddr = fromNumber number number.prefixLength;
+      in newaddr;
   };
 }
-
