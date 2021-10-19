@@ -47,6 +47,16 @@ with pkgs.lib; {
     fromIPString = str : prefixLength :
       fromString "${str}/${toString prefixLength}";
 
+    network_ = x: (network x).address;
+    networkCIDR = x: toCIDR (network x);
+    netmask_ = x: (netmask x).address;
+    wildcard_ = x: (wildcard x).address;
+    broadcast_ = x: (broadcast x).address;
+    first_ = x: (first x).address;
+    next_ = x: (next x).address;
+    prev_ = x: (prev x).address;
+    last_ = x: (last x).address;
+
     network = addr :
       let
         pfl = addr.prefixLength;
@@ -73,22 +83,22 @@ with pkgs.lib; {
     first = addr :
       let
         number = toNumber (network addr) + 1;
-        newaddr = fromNumber number number.prefixLength;
+        newaddr = fromNumber number addr.prefixLength;
       in newaddr;
     next = addr :
       let
         number = toNumber addr + 1;
-        newaddr = fromNumber number number.prefixLength;
+        newaddr = fromNumber number addr.prefixLength;
       in newaddr;
     prev = addr :
       let
         number = toNumber addr - 1;
-        newaddr = fromNumber number number.prefixLength;
+        newaddr = fromNumber number addr.prefixLength;
       in newaddr;
     last = addr :
       let
         number = toNumber (broadcast addr) - 1;
-        newaddr = fromNumber number number.prefixLength;
+        newaddr = fromNumber number addr.prefixLength;
       in newaddr;
   };
 }
