@@ -2,17 +2,33 @@
 , libXcomposite, libXrender, libXext, libXxf86vm, libXtst, libdrm
 , vulkan-loader, wayland, wayland-protocols, libxkbcommon, libcap
 , SDL2, mesa, libinput, pixman, xcbutilerrors, xcbutilwm, glslang
-, ninja, libXi, makeWrapper, xwayland, libXres, libuuid, xcbutilrenderutil }:
+, ninja, libXi, makeWrapper, xwayland, libXres, libuuid, xcbutilrenderutil
+, pipewire, stb, writeText, wlroots, vulkan-headers }:
 
-stdenv.mkDerivation rec {
+let
+  stbpc = writeText "stbpc" ''
+    prefix=${stb}
+    includedir=''${prefix}/include/stb
+    Cflags: -I''${includedir}
+    Name: stb
+    Version: ${stb.version}
+    Description: stb
+  '';
+  stb_ = stb.overrideAttrs (oldAttrs: rec {
+    installPhase = ''
+      ${oldAttrs.installPhase}
+      install -Dm644 ${stbpc} $out/lib/pkgconfig/stb.pc
+    '';
+  });
+in stdenv.mkDerivation rec {
   pname = "gamescope";
-  version = "3.8.1";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "Plagman";
     repo = "gamescope";
     rev = version;
-    sha256 = "1712wz58wjr7gyglapv5l7ykbx15wjz816xa6fj1gw1hx2ky7c7k";
+    sha256 = "05a1sj1fl9wpb9jys515m96958cxmgim8i7zc5mn44rjijkfbfcb";
     fetchSubmodules = true;
   };
 
@@ -31,8 +47,9 @@ stdenv.mkDerivation rec {
     libXtst libdrm vulkan-loader wayland wayland-protocols
     libxkbcommon libcap SDL2 mesa libinput pixman xcbutilerrors
     xcbutilwm libXi libXres libuuid xcbutilrenderutil xwayland
+    pipewire wlroots
   ];
-  nativeBuildInputs = [ meson pkgconfig glslang ninja makeWrapper ];
+  nativeBuildInputs = [ meson pkgconfig glslang ninja makeWrapper stb_ ];
 
   meta = with lib; {
     description = "The micro-compositor formerly known as steamcompmgr";
