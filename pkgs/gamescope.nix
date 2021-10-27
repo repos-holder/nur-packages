@@ -3,7 +3,7 @@
 , vulkan-loader, wayland, wayland-protocols, libxkbcommon, libcap
 , SDL2, mesa, libinput, pixman, xcbutilerrors, xcbutilwm, glslang
 , ninja, libXi, makeWrapper, xwayland, libXres, libuuid, xcbutilrenderutil
-, pipewire, stb, writeText, wlroots, vulkan-headers }:
+, pipewire, stb, writeText, wlroots }:
 
 let
   stbpc = writeText "stbpc" ''
