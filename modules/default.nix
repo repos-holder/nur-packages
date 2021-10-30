@@ -15,4 +15,5 @@ rec {
   job = ./job.nix;
   monitor = import ./monitor.nix unstable;
   router = ./router.nix;
+  steam = ./steam.nix;
 }
