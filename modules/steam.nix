@@ -2,11 +2,11 @@
 
 with lib;
 let
-  cfg = config.services.steam;
-  xorg = cfg.enable && config.services.steam.xorg;
-  wayland = cfg.enable && config.services.steam.wayland;
+  cfg = config.hardware.steam;
+  xorg = cfg.enable && config.hardware.steam.xorg;
+  wayland = cfg.enable && config.hardware.steam.wayland;
 in {
-  options.services.steam = {
+  options.hardware.steam = {
     enable = mkEnableOption "Steam headless server";
     xorg = mkEnableOption "via X.Org";
     wayland = mkEnableOption "via Wayland";
@@ -24,7 +24,7 @@ in {
         options amdgpu virtual_display=0000:07:00.0,1
       '';
       services.xserver.enable = true;
-      services.xserver.autorun = autorun;
+      services.xserver.autorun = cfg.autorun;
       services.xserver.screenSection = ''
         SubSection "Display"
           Depth  24
@@ -51,7 +51,7 @@ in {
         output HEADLESS-1 resolution 1920x1080
       '';
       systemd.user.services.steam = {
-        wantedBy = optional autorun "default.target";
+        wantedBy = optional cfg.autorun "default.target";
         description = "Start steam";
         path = [ "/run/current-system/sw" ];
         serviceConfig = {
