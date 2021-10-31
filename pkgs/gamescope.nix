@@ -2,8 +2,7 @@
 , wayland, wayland-protocols, libxkbcommon, libcap
 , SDL2, mesa, libinput, pixman, xcbutilerrors, xcbutilwm, glslang
 , ninja, makeWrapper, xwayland, libuuid, xcbutilrenderutil
-, pipewire, stb, writeText, wlroots
-, callPackage, fetchurl }:
+, pipewire, stb, writeText, wlroots, vulkan-loader, vulkan-headers }:
 
 let
   stbpc = writeText "stbpc" ''
@@ -20,16 +19,26 @@ let
       install -Dm644 ${stbpc} $out/lib/pkgconfig/stb.pc
     '';
   });
-  vulkan-headers = callPackage (fetchurl {
-    name = "vulkan-headers-latest.nix";
-    url = "https://raw.githubusercontent.com/NixOS/nixpkgs/12cf7636fb8bc0981e0cb99dcd544d3ce180868e/pkgs/development/libraries/vulkan-headers/default.nix";
-    sha256 = "0y5k0fscv02p445knxniazcx7xm4nbds0xqkbkg9s907cv69nvph";
-  }) {};
-  vulkan-loader = (callPackage (fetchurl {
-    name = "vulkan-loader-latest.nix";
-    url = "https://raw.githubusercontent.com/NixOS/nixpkgs/12cf7636fb8bc0981e0cb99dcd544d3ce180868e/pkgs/development/libraries/vulkan-loader/default.nix";
-    sha256 = "132qw2mw1zmi8qzz18l05ahwljg8czldkj43ib7ihrayv82ciyww";
-  }) {}).override { inherit vulkan-headers; };
+  vulkan-headers_ = vulkan-headers.overrideAttrs (oldAttrs: rec {
+    version = "1.2.189.1";
+
+    src = fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "Vulkan-Headers";
+      rev = "sdk-${version}";
+      sha256 = "1qggc7dv9jr83xr9w2h375wl3pz3rfgrk9hnrjmylkg9gz4p9q03";
+    };
+  });
+  vulkan-loader_ = (vulkan-loader.overrideAttrs (oldAttrs: rec {
+    version = "1.2.189.1";
+
+    src = fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "Vulkan-Loader";
+      rev = "sdk-${version}";
+      sha256 = "1745fdzi0n5qj2s41q6z1y52cq8pwswvh1a32d3n7kl6bhksagp6";
+    };
+  })).override { vulkan-headers = vulkan-headers_; };
 in stdenv.mkDerivation rec {
   pname = "gamescope";
   version = "3.9.1";
@@ -54,7 +63,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = with xorg; [
     libX11 libXdamage libXcomposite libXrender libXext libXxf86vm
-    libXtst libdrm vulkan-loader wayland wayland-protocols
+    libXtst libdrm vulkan-loader_ wayland wayland-protocols
     libxkbcommon libcap SDL2 mesa libinput pixman xcbutilerrors
     xcbutilwm libXi libXres libuuid xcbutilrenderutil xwayland
     pipewire wlroots
@@ -67,6 +76,5 @@ in stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
-    broken = true;
   };
 }
