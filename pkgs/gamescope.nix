@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkgconfig, libX11, libXdamage
-, libXcomposite, libXrender, libXext, libXxf86vm, libXtst, libdrm
-, vulkan-loader, wayland, wayland-protocols, libxkbcommon, libcap
+{ lib, stdenv, fetchFromGitHub, meson, pkgconfig, libdrm, xorg
+, wayland, wayland-protocols, libxkbcommon, libcap
 , SDL2, mesa, libinput, pixman, xcbutilerrors, xcbutilwm, glslang
-, ninja, libXi, makeWrapper, xwayland, libXres, libuuid, xcbutilrenderutil
-, pipewire, stb, writeText, wlroots }:
+, ninja, makeWrapper, xwayland, libuuid, xcbutilrenderutil
+, pipewire, stb, writeText, wlroots
+, callPackage, fetchurl }:
 
 let
   stbpc = writeText "stbpc" ''
@@ -20,6 +20,16 @@ let
       install -Dm644 ${stbpc} $out/lib/pkgconfig/stb.pc
     '';
   });
+  vulkan-headers = callPackage (fetchurl {
+    name = "vulkan-headers-latest.nix";
+    url = "https://raw.githubusercontent.com/NixOS/nixpkgs/12cf7636fb8bc0981e0cb99dcd544d3ce180868e/pkgs/development/libraries/vulkan-headers/default.nix";
+    sha256 = "0y5k0fscv02p445knxniazcx7xm4nbds0xqkbkg9s907cv69nvph";
+  }) {};
+  vulkan-loader = (callPackage (fetchurl {
+    name = "vulkan-loader-latest.nix";
+    url = "https://raw.githubusercontent.com/NixOS/nixpkgs/12cf7636fb8bc0981e0cb99dcd544d3ce180868e/pkgs/development/libraries/vulkan-loader/default.nix";
+    sha256 = "132qw2mw1zmi8qzz18l05ahwljg8czldkj43ib7ihrayv82ciyww";
+  }) {}).override { inherit vulkan-headers; };
 in stdenv.mkDerivation rec {
   pname = "gamescope";
   version = "3.9.1";
@@ -42,7 +52,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
-  buildInputs = [
+  buildInputs = with xorg; [
     libX11 libXdamage libXcomposite libXrender libXext libXxf86vm
     libXtst libdrm vulkan-loader wayland wayland-protocols
     libxkbcommon libcap SDL2 mesa libinput pixman xcbutilerrors
