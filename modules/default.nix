@@ -16,4 +16,5 @@ rec {
   monitor = import ./monitor.nix unstable;
   server = ./server.nix;
   steam = ./steam.nix;
+  wifi = ./wifi.nix;
 }
