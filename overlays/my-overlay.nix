@@ -1,4 +1,4 @@
-{ unstable, config }:
+{ unstable, config, wireless-regdb_ }:
 
 self: super:
 rec {
@@ -15,5 +15,11 @@ rec {
       wrapProgram $out/bin/qutebrowser \
         --prefix PATH : "${super.lib.makeBinPath [ super.mpv ]}"
     '';
+  });
+  wireless-regdb = wireless-regdb_;
+  crda = super.crda.overrideAttrs (oldAttrs: rec {
+    makeFlags = oldAttrs.makeFlags ++ [
+      "PUBKEY_DIR=${wireless-regdb}/lib/crda/pubkeys"
+    ];
   });
 }
