@@ -11,6 +11,16 @@ in {
     xorg = mkEnableOption "via X.Org";
     wayland = mkEnableOption "via Wayland";
     autorun = mkEnableOption "run by default";
+    user = mkOption {
+      type = types.str;
+    };
+    devid = mkOption {
+      type = types.str;
+    };
+    resolution = mkOption {
+      type = types.str;
+      default = "1920x1080";
+    };
   };
 
   config = mkMerge [
@@ -21,18 +31,18 @@ in {
    })
    (mkIf xorg {
       boot.extraModprobeConfig = ''
-        options amdgpu virtual_display=0000:07:00.0,1
+        options amdgpu virtual_display=${cfg.devid}
       '';
       services.xserver.enable = true;
       services.xserver.autorun = cfg.autorun;
       services.xserver.screenSection = ''
         SubSection "Display"
           Depth  24
-          Modes  "1920x1080"
+          Modes  ${cfg.resolution}
         EndSubSection
       '';
       services.xserver.displayManager.autoLogin.enable = true;
-      services.xserver.displayManager.autoLogin.user = "dukzcry";
+      services.xserver.displayManager.autoLogin.user = cfg.user;
       services.xserver.displayManager.defaultSession = "none+i3";
       services.xserver.windowManager.i3.enable = true;
       services.xserver.windowManager.i3.extraSessionCommands = ''
@@ -48,11 +58,11 @@ in {
       environment.etc."sway/config.d/gaming.conf".source = pkgs.writeText "gaming.conf" ''
         exec ${pkgs.wayvnc}/bin/wayvnc 0.0.0.0
         exec steam
-        output HEADLESS-1 resolution 1920x1080
+        output HEADLESS-1 resolution ${cfg.resolution}
       '';
       systemd.user.services.steam = {
         wantedBy = optional cfg.autorun "default.target";
-        description = "Start steam";
+        description = "Steam headless server";
         path = [ "/run/current-system/sw" ];
         serviceConfig = {
           ExecStart = "/run/current-system/sw/bin/sway";
@@ -63,7 +73,7 @@ in {
         enableLingering = ''
           rm -r /var/lib/systemd/linger
           mkdir /var/lib/systemd/linger
-          touch /var/lib/systemd/linger/dukzcry
+          touch /var/lib/systemd/linger/${cfg.user}
         '';
       };
     })

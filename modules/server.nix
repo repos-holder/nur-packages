@@ -6,7 +6,7 @@ let
 in {
   options.services.server = {
     enable = mkEnableOption ''
-      Server support
+      Support for my home server
     '';
   };
 
