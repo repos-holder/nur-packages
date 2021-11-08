@@ -16,6 +16,7 @@ in {
     };
     devid = mkOption {
       type = types.str;
+      example = "0000:07:00.0,1";
     };
     resolution = mkOption {
       type = types.str;
