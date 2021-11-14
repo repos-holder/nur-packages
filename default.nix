@@ -33,5 +33,7 @@ in rec {
   bitwig-studio3 = pkgs.callPackage ./pkgs/bitwig-studio3.nix {};
   massdns = pkgs.callPackage ./pkgs/massdns.nix {};
   wireless-regdb = pkgs.callPackage ./pkgs/wireless-regdb {};
+  qemu-3dfx = pkgs.callPackage ./pkgs/qemu-3dfx {};
+  qemu-3dfx-wrappers = pkgs.callPackage ./pkgs/qemu-3dfx/wrappers.nix {};
 }
 
