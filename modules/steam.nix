@@ -39,7 +39,7 @@ in {
       services.xserver.screenSection = ''
         SubSection "Display"
           Depth  24
-          Modes  ${cfg.resolution}
+          Modes  "${cfg.resolution}"
         EndSubSection
       '';
       services.xserver.displayManager.autoLogin.enable = true;
