@@ -1,4 +1,4 @@
-{ unstable, config }:
+{ unstable, config, amd }:
 
 self: super:
 rec {
@@ -16,4 +16,5 @@ rec {
         --prefix PATH : "${super.lib.makeBinPath [ super.mpv ]}"
     '';
   });
+  firmwareLinuxNonfree = if config.networking.hostName == "robocat" then amd else super.firmwareLinuxNonfree;
 }
