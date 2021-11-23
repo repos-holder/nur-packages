@@ -47,7 +47,7 @@ in {
       services.xserver.displayManager.defaultSession = "none+i3";
       services.xserver.windowManager.i3.enable = true;
       services.xserver.windowManager.i3.extraSessionCommands = ''
-        exec ${pkgs.x11vnc}/bin/x11vnc &
+        exec ${pkgs.x11vnc}/bin/x11vnc -forever &
         exec steam &
       '';
    })
