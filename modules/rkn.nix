@@ -38,9 +38,6 @@ in {
     OnCalendar = mkOption {
       type = types.str;
       default = "weekly";
-      description = ''
-        Как часто обновлять список роскомпозора
-      '';
     };
     file = mkOption {
       type = types.str;
@@ -65,6 +62,9 @@ in {
       example = ''
         match-clients { ''${ip4.networkCIDR iif.ip}; };
       '';
+    };
+    resolver = mkOption {
+      type = types.str;
     };
   };
 
@@ -138,7 +138,7 @@ in {
     services.nginx.enable = true;
     services.nginx.proxyResolveWhileRunning = true;
     services.nginx.resolver = {
-      addresses = [ "127.0.0.1" ];
+      addresses = [ cfg.resolver ];
       ipv6 = false;
     };
     services.nginx.virtualHosts = { 
@@ -154,7 +154,7 @@ in {
     };
     services.nginx.streamConfig = ''
       server {
-        resolver 127.0.0.1 ipv6=off;
+        resolver ${cfg.resolver} ipv6=off;
         listen ${cfg.address.address}:443;
         ssl_preread on;
         proxy_pass $ssl_preread_server_name:443;
@@ -167,13 +167,8 @@ in {
     };
 
     services.bind.enable = true;
-    services.bind.listenOn = [ "127.0.0.1" ];
-    services.bind.cacheNetworks = [ "any" ];
     services.bind.extraOptions = ''
-      recursion yes;
       check-names master ignore;
-      # https://gitlab.isc.org/isc-projects/bind9/-/issues/2769
-      dnssec-validation no;
     '';
     systemd.services.bind.preStart = ''
       set +e
@@ -188,9 +183,6 @@ in {
           file "${cfg.file}";
         };
         ${cfg.bindExtraConfig}
-      };
-      view "main" {
-        match-clients { any; };
       };
     '';
   };
