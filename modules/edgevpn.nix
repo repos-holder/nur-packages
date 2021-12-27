@@ -29,6 +29,10 @@ in {
       type = types.str;
       default = "10.0.0.1/24";
     };
+    router = mkOption {
+      type = types.str;
+      default = "";
+    };
     apiPort = mkOption {
       type = types.ints.positive;
       default = 8080;
@@ -56,42 +60,42 @@ in {
   };
 
   config = mkMerge [
-		(mkIf cfg.enable {
-    	environment.systemPackages = with pkgs.nur.repos.dukzcry; [ edgevpn ];
-		})
-		(mkIf cfg.server {
-    	systemd.services.edgevpn = {
-      	requires = [ "network-online.target" ];
-      	after = [ "network.target" "network-online.target" ];
-      	wantedBy = [ "multi-user.target" ];
-      	description = "EdgeVPN service";
-      	path = with pkgs.nur.repos.dukzcry; [ edgevpn ];
-      	serviceConfig = {
-        	ExecStart = with pkgs.nur.repos.dukzcry; ''
-          	edgevpn --address ${cfg.address} --config ${cfg.config} --api --api-listen "${cfg.apiAddress}:${toString cfg.apiPort}"
-        	'';
-      	};
-      	postStart = ''
-        	set +e
-        	${cfg.postStart}
-        	true
-      	'';
-      	preStop = ''
-        	set +e
-        	${cfg.preStop}
-        	true
-      	'';
-			};
+    (mkIf cfg.enable {
+      environment.systemPackages = with pkgs.nur.repos.dukzcry; [ edgevpn ];
     })
-    (mkIf cfg.client {
+    (mkIf server {
+      systemd.services.edgevpn = {
+        requires = [ "network-online.target" ];
+        after = [ "network.target" "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        description = "EdgeVPN service";
+        serviceConfig = {
+          ExecStart = with pkgs.nur.repos.dukzcry; ''
+            ${edgevpn}/bin/edgevpn --address ${cfg.address} --config ${cfg.config} --api --api-listen "${cfg.apiAddress}:${toString cfg.apiPort}"
+          '';
+        };
+        postStart = ''
+          set +e
+          ${cfg.postStart}
+          true
+        '';
+        preStop = ''
+          set +e
+          ${cfg.preStop}
+          true
+        '';
+       };
+    })
+    (mkIf client {
+      boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
       systemd.services.edgevpn = {
         requires = [ "network-online.target" ];
         after = [ "network.target" "network-online.target" ];
         description = "EdgeVPN service";
-        path = with pkgs.nur.repos.dukzcry; [ edgevpn ];
+        path = with pkgs; [ iproute2 openresolv ];
         serviceConfig = {
           ExecStart = with pkgs.nur.repos.dukzcry; ''
-            edgevpn --address ${cfg.address} --config ${cfg.config}
+            ${edgevpn}/bin/edgevpn --address ${cfg.address} --config ${cfg.config} ${optionalString (cfg.router != "") "--router ${cfg.router}"}
           '';
         };
         postStart = ''
@@ -106,5 +110,5 @@ in {
         '';
       };
     })
-	];
+  ];
 }
