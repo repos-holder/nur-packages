@@ -33,6 +33,7 @@ in {
     };
     postStart = mkOption {
       type = types.str;
+      default = "";
       example = ''
         ip route add dev ${config.programs.cjdns.interface} 10.0.0.0/24
         echo -e "nameserver 10.0.0.2\nsearch local" | resolvconf -a ${config.programs.cjdns.interface}
@@ -40,6 +41,7 @@ in {
     };
     preStop = mkOption {
       type = types.str;
+      default = "";
       example = ''
         resolvconf -d ${config.programs.cjdns.interface}
       '';
