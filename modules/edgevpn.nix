@@ -53,7 +53,6 @@ in {
       type = types.str;
 			default = "";
       example = ''
-        ip route del dev ${config.networking.edgevpn.interface} 10.0.0.0/24
         resolvconf -d ${config.networking.edgevpn.interface}
       '';
     };
@@ -76,6 +75,7 @@ in {
         };
         postStart = ''
           set +e
+          sleep 5
           ${cfg.postStart}
           true
         '';
@@ -100,6 +100,7 @@ in {
         };
         postStart = ''
           set +e
+          sleep 5
           ${cfg.postStart}
           true
         '';
