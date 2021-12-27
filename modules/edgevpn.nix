@@ -68,6 +68,7 @@ in {
         after = [ "network.target" "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         description = "EdgeVPN service";
+        path = with pkgs; [ iproute2 ];
         serviceConfig = {
           ExecStart = with pkgs.nur.repos.dukzcry; ''
             ${edgevpn}/bin/edgevpn --address ${cfg.address} --config ${cfg.config} --api --api-listen "${cfg.apiAddress}:${toString cfg.apiPort}"
