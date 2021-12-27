@@ -41,7 +41,6 @@ in {
     preStop = mkOption {
       type = types.str;
       example = ''
-        ip route del dev ${config.programs.cjdns.interface} 10.0.0.0/24
         resolvconf -d ${config.programs.cjdns.interface}
       '';
     };
