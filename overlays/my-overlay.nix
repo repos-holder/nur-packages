@@ -24,17 +24,4 @@ rec {
       "PUBKEY_DIR=${wireless-regdb}/lib/crda/pubkeys"
     ];
   }) else super.crda;
-  miniupnpd = super.miniupnpd.overrideAttrs (oldAttrs: rec {
-    version = "2.1.20200510";
-    src = super.fetchurl {
-      url = "http://miniupnp.free.fr/files/download.php?file=miniupnpd-${version}.tar.gz";
-      sha256 = "12vy2bsk52kmf6g4ms7qidd1njhz7ay1yi062n2zphcw6s7p07l2";
-      name = "miniupnpd-${version}.tar.gz";
-    };
-    #makefile = "Makefile.linux_nft";
-    dontConfigure = true;
-    buildFlags = [ "miniupnpd" "SRCDIR=." ];
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ super.which ];
-    buildInputs = oldAttrs.buildInputs ++ (with super; [ libmnl libnftnl ]);
-  });
 }
