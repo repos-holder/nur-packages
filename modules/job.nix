@@ -52,5 +52,5 @@ in {
         iptables -t nat -A POSTROUTING -o job0 -j MASQUERADE
       '';
     })
-  };
+  ];
 }
