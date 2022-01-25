@@ -18,6 +18,10 @@ in {
     server = mkEnableOption ''
       server mode
     '';
+    logLevel = mkOption {
+      type = types.str;
+      default = "info";
+    };
     config = mkOption {
       type = types.str;
       default = "/etc/edgevpn/config.yaml";
@@ -76,7 +80,7 @@ in {
         path = with pkgs; [ edgevpn iproute2 ];
         serviceConfig = {
           ExecStart = pkgs.writeShellScript "edgevpn" ''
-            edgevpn --address ${cfg.address} --config ${cfg.config} --api --api-listen "${cfg.apiAddress}:${toString cfg.apiPort}"
+            edgevpn --log-level ${cfg.logLevel} --config ${cfg.config} --address ${cfg.address} --api --api-listen "${cfg.apiAddress}:${toString cfg.apiPort}"
           '';
         };
         postStart = ''
@@ -101,7 +105,7 @@ in {
         path = with pkgs; [ edgevpn iproute2 openresolv ];
         serviceConfig = {
           ExecStart = pkgs.writeShellScript "edgevpn" ''
-            edgevpn --address ${cfg.address} ${optionalString cfg.dhcp "--dhcp"} --config ${cfg.config} ${optionalString (cfg.router != null) "--router ${cfg.router}"}
+            edgevpn --log-level ${cfg.logLevel} --config ${cfg.config} --address ${cfg.address} ${optionalString cfg.dhcp "--dhcp"} ${optionalString (cfg.router != null) "--router ${cfg.router}"}
           '';
         };
         postStart = ''
