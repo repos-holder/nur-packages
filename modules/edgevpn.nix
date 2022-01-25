@@ -28,14 +28,18 @@ in {
     };
     address = mkOption {
       type = types.str;
-      default = "10.0.0.1/24";
+      default = "10.1.0.1/24";
+    };
+    dhcp = mkOption {
+      type = types.bool;
+      default = client;
     };
     router = mkOption {
-      type = types.str;
-      default = "";
+      type = types.nullOr types.str;
+      default = null;
     };
     apiPort = mkOption {
-      type = types.ints.positive;
+      type = types.port;
       default = 8080;
     };
     apiAddress = mkOption {
@@ -97,7 +101,7 @@ in {
         path = with pkgs; [ edgevpn iproute2 openresolv ];
         serviceConfig = {
           ExecStart = pkgs.writeShellScript "edgevpn" ''
-            edgevpn --address ${cfg.address} --config ${cfg.config} ${optionalString (cfg.router != "") "--router ${cfg.router}"}
+            edgevpn --address ${cfg.address} ${optionalString cfg.dhcp "--dhcp"} --config ${cfg.config} ${optionalString (cfg.router != null) "--router ${cfg.router}"}
           '';
         };
         postStart = ''
