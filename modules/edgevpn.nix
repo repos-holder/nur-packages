@@ -6,7 +6,7 @@ let
   server = cfg.enable && cfg.server;
   client = cfg.enable && !cfg.server;
   edgevpn = pkgs.nur.repos.dukzcry.edgevpn;
-  sleep = "while [ ! -f /sys/devices/virtual/net/${cfg.interface} ]; do sleep 5; done";
+  sleep = "while [ ! -d /sys/devices/virtual/net/${cfg.interface} ]; do sleep 5; done";
 in {
   options.networking.edgevpn = {
     enable = mkOption {
