@@ -45,6 +45,7 @@ in {
             vpn-yar.renins.ru
           '';
         };
+        Restart="on-failure";
       };
       environment.etc.hosts.mode = "0644";
       networking.firewall.extraCommands = ''
