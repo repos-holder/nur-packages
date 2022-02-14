@@ -106,7 +106,6 @@ in {
           ExecStart = pkgs.writeShellScript "edgevpn" ''
             edgevpn --log-level ${cfg.logLevel} --config $CREDENTIALS_DIRECTORY/config.yaml --address ${cfg.address} --api --api-listen "${cfg.apiAddress}:${toString cfg.apiPort}"
           '';
-          CPUQuota = "5%";
         } // serviceOptions;
       };
     })
