@@ -117,12 +117,9 @@ in {
         after = [ "network.target" "network-online.target" ];
         description = "EdgeVPN client";
         path = with pkgs; [ edgevpn iproute2 openresolv ];
-        environment = {
-          HOME = "%S/edgevpn";
-        };
         serviceConfig = {
           ExecStart = pkgs.writeShellScript "edgevpn" ''
-            edgevpn --log-level ${cfg.logLevel} --config $CREDENTIALS_DIRECTORY/config.yaml --address ${cfg.address} ${optionalString cfg.dhcp "--dhcp"} ${optionalString (cfg.router != null) "--router ${cfg.router}"}
+            edgevpn --log-level ${cfg.logLevel} --config $CREDENTIALS_DIRECTORY/config.yaml --address ${cfg.address} ${optionalString cfg.dhcp "--dhcp"} ${optionalString (cfg.router != null) "--router ${cfg.router}"} --lease-dir /var/lib/edgevpn
           '';
           StateDirectory = "edgevpn";
           ReadWritePaths = "/var/lib/edgevpn";
