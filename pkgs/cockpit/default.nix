@@ -6,11 +6,11 @@ let
   path = lib.makeSearchPath "bin" ([ "$out" "/run/wrappers" "/run/current-system/sw" ] ++ packages);
 in stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "267";
+  version = "270";
 
   src = fetchzip {
     url = "https://github.com/cockpit-project/cockpit/releases/download/${version}/cockpit-${version}.tar.xz";
-    sha256 = "0bdc2qzqcz4k92asxip00nambn47a4w12c4vl08xj6nc1ja627ig";
+    sha256 = "sha256-LzPwuYBC2HukgsCtWPyCJkJX8gwe0Fg4ARqSPy2HB7U=";
   };
 
   configureFlags = [
