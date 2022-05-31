@@ -25,6 +25,7 @@ in {
         transmission-remote-gtk
         nextcloud-client
         moonlight-qt
+        pkgs.nur.repos.dukzcry.cockpit-client
       ];
     };
     nix.buildMachines = [{
