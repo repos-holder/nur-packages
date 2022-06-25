@@ -7,23 +7,8 @@ let
   client = cfg.enable && !cfg.server;
   edgevpn = pkgs.nur.repos.dukzcry.edgevpn;
   ip4 = pkgs.nur.repos.dukzcry.lib.ip4;
-  serviceOptions = {
-    LockPersonality = true;
+  serviceOptions = pkgs.nur.repos.dukzcry.lib.systemd.default // {
     DeviceAllow = "/dev/net/tun";
-    PrivateIPC = true;
-    PrivateMounts = true;
-    ProtectClock = true;
-    ProtectControlGroups = true;
-    ProtectHostname = true;
-    ProtectKernelLogs = true;
-    ProtectKernelModules = true;
-    ProtectKernelTunables = true;
-    ProtectProc = "invisible";
-    RestrictNamespaces = true;
-    RestrictRealtime = true;
-    MemoryDenyWriteExecute = true;
-    SystemCallArchitectures = "native";
-    SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
     LoadCredential = "config.yaml:${cfg.config}";
   };
   envOptions = {
@@ -119,15 +104,10 @@ in {
           APILISTEN = "${cfg.apiAddress}:${toString cfg.apiPort}";
           EDGEVPNBOOTSTRAPIFACE = "false";
         } // envOptions;
-        serviceConfig = {
+        serviceConfig = pkgs.nur.repos.dukzcry.lib.systemd.dynamic // {
           ExecStart = pkgs.writeShellScript "edgevpn" ''
             edgevpn --config $CREDENTIALS_DIRECTORY/config.yaml
           '';
-          PrivateTmp = true;
-          RemoveIPC = true;
-          NoNewPrivileges = true;
-          ProtectSystem = "strict";
-          RestrictSUIDSGID = true;
           User = "edgevpn";
           Group = "edgevpn";
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";

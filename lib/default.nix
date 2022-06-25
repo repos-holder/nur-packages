@@ -110,4 +110,30 @@ with pkgs.lib; {
         newaddr = fromNumber number addr.prefixLength;
       in newaddr;
   };
+  systemd = {
+    default = {
+      LockPersonality = true;
+      PrivateIPC = true;
+      PrivateMounts = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectProc = "invisible";
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      MemoryDenyWriteExecute = true;
+      SystemCallArchitectures = "native";
+      SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
+    };
+    dynamic = {
+      PrivateTmp = true;
+      RemoveIPC = true;
+      NoNewPrivileges = true;
+      ProtectSystem = "strict";
+      RestrictSUIDSGID = true;
+    };
+  };
 }
