@@ -3,9 +3,9 @@ imports: { config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.hardware;
-  any = l: lists.any (x: x == config.networking.hostName);
-  laptop = any [ "li-si-tsin" ];
-  server = any [ "robocat" ];
+  any' = l: any (x: x == config.networking.hostName) l;
+  laptop = any' [ "li-si-tsin" ];
+  server = any' [ "robocat" ];
 in {
   inherit imports;
 
