@@ -46,7 +46,11 @@ in {
             };
           };
           monitor = {
-            fingerprint."${monitor'.name}" = monitor'.setup;
+            fingerprint = {
+              "${monitor'.name}" = monitor'.setup;
+            } // optionalAttrs (cfg.config != {}) {
+              "${cfg.config.name}" = cfg.config.setup;
+            };
             config = {
               "${monitor'.name}" = monitor'.config;
             } // optionalAttrs (cfg.config != {}) {
