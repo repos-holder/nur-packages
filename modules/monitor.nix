@@ -72,15 +72,17 @@ in {
             case "$AUTORANDR_CURRENT_PROFILE" in
               laptop|integer)
                 DPI=96
+                SIZE=16
                 ;;
               monitor|both)
                 DPI=144
+                SIZE=32
                 ;;
               *)
                 echo "Unknown profle: $AUTORANDR_CURRENT_PROFILE"
                 exit 1
             esac
-            echo "Xft.dpi: $DPI" | ${pkgs.xorg.xrdb}/bin/xrdb -merge
+            printf "Xft.dpi:%s\nXcursor.size:%s\n" "$DPI" "$SIZE" | ${pkgs.xorg.xrdb}/bin/xrdb -merge
           '';
         };
       };
