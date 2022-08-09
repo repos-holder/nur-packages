@@ -36,5 +36,4 @@ rec {
   libidn = callPackage ./pkgs/libidn.nix {};
   gitupdate = callPackage ./pkgs/gitupdate.nix {};
   homer = callPackage ./pkgs/homer.nix {};
-  iwl20x_ax_enable = callPackage ./pkgs/iwl20x_ax_enable.nix {};
 }
