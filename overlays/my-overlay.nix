@@ -72,7 +72,7 @@ rec {
         --replace "if (mon->fallback)" "if (0)"
     '';
   });
-} // optionalAttrs config.hardware.wifi.enable {
+} // optionalAttrs (config.hardware.wifi.enable or false) {
   inherit (pkgs.nur.repos.dukzcry) wireless-regdb;
   crda = super.crda.override {
     inherit (pkgs.nur.repos.dukzcry) wireless-regdb;
