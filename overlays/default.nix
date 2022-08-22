@@ -51,11 +51,6 @@ rec {
   });
   autorandr = super.autorandr.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or []) ++ [ ./autorandr.patch ];
-    buildPhase = ''
-      ${oldAttrs.buildPhase or ""}
-      substituteInPlace autorandr.py \
-        --replace 'os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))' '"/etc/xdg"'
-    '';
   });
 } // optionalAttrs (config.hardware.wifi.enable or false) {
   inherit (pkgs.nur.repos.dukzcry) wireless-regdb;
