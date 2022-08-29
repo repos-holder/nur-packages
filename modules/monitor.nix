@@ -36,9 +36,9 @@ in {
       services.ddccontrol.enable = true;
       hardware.i2c.enable = true;
       environment.systemPackages = with pkgs; [ ddcutil ];
+      environment.variables.QT_AUTO_SCREEN_SCALE_FACTOR = "0";
     })
     (mkIf (cfg.enable && config.services.xserver.enable) {
-      environment.variables.QT_AUTO_SCREEN_SCALE_FACTOR = "0";
       systemd.user.services.autorandr = {
         description = "autorandr start on login";
         wantedBy = [ "graphical-session.target" ];
