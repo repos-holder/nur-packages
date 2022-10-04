@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, python3, pkg-config, gtk3
 , glew, webkitgtk, icu, boost, curl, alsa-lib, makeWrapper
-, gnome3, makeDesktopItem, gcc-unwrapped
+, gnome, makeDesktopItem, gcc-unwrapped
 , debug ? false }:
 
 let
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     install -Dm755 ./The-Orm/KnobKraftOrm $out/bin/KnobKraftOrm
     # make file dialogs work under JUCE
     ${optionalString (!debug) ''
-      wrapProgram $out/bin/KnobKraftOrm --prefix PATH ":" ${gnome3.zenity}/bin
+      wrapProgram $out/bin/KnobKraftOrm --prefix PATH ":" ${gnome.zenity}/bin
     ''}
 
     mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
