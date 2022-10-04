@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, python3, pkg-config, gtk3
-, glew, webkitgtk, icu, boost, curl, alsaLib, makeWrapper
+, glew, webkitgtk, icu, boost, curl, alsa-lib, makeWrapper
 , gnome3, makeDesktopItem, gcc-unwrapped
 , debug ? false }:
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   ] ++ optional debug [ "-DCMAKE_BUILD_TYPE=Debug" ];
 
   buildInputs = [
-    gtk3 glew webkitgtk icu boost curl alsaLib
+    gtk3 glew webkitgtk icu boost curl alsa-lib
   ];
   nativeBuildInputs = [
     cmake python3 pkg-config makeWrapper
