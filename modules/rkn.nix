@@ -123,7 +123,7 @@ in {
         server=/onion/${cfg.address}#9053
         rebind-domain-ok=onion
       '' + optionalString (cfg.tor.excludes != []) ''
-        ipset=/${concatStringsSep "/" cfg.tor.excludes}erkn
+        ipset=/${concatStringsSep "/" cfg.tor.excludes}/erkn
       '';
     })
   ];
