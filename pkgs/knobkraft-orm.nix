@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, python3, pkgconfig, gtk3
+{ stdenv, lib, fetchFromGitHub, cmake, python3, pkg-config, gtk3
 , glew, webkitgtk, icu, boost, curl, alsaLib, makeWrapper
 , gnome3, makeDesktopItem, gcc-unwrapped
 , debug ? false }:
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     gtk3 glew webkitgtk icu boost curl alsaLib
   ];
   nativeBuildInputs = [
-    cmake python3 pkgconfig makeWrapper
+    cmake python3 pkg-config makeWrapper
   ];
 
   installPhase = ''
