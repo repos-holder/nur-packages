@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, pkg-config, glib, systemd, json-glib, gnutls, krb5, polkit, libssh, pam, libxslt, xmlto
+{ lib, stdenv, fetchzip, pkg-config, glib, systemd, json-glib, gnutls, krb5, polkit, libssh, pam, libxslt, xmlto, libxcrypt
 , python3, gnused, coreutils, makeWrapper, openssl
 , packages ? []
 , client ? false, python3Packages, wrapGAppsHook, gtk3, gobject-introspection, webkitgtk, glib-networking, openssh }:
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib systemd json-glib gnutls krb5 polkit libssh pam libxslt xmlto
+    glib systemd json-glib gnutls krb5 polkit libssh pam libxslt xmlto libxcrypt
   ] ++ lib.optionals client [
     gtk3 webkitgtk glib-networking
   ];
