@@ -65,6 +65,9 @@ rec {
     });
     rtw8852be = pkgs.nur.repos.dukzcry.rtw8852be.override { kernel = super.linuxPackages.kernel; };
   });
+  linuxPackages_latest = super.linuxPackages_latest.extend (lpself: lpsuper: {
+    rtw8852be = pkgs.nur.repos.dukzcry.rtw8852be.override { kernel = super.linuxPackages_latest.kernel; };
+  });
 } // optionalAttrs (config.hardware.wifi.enable or false) {
   inherit (pkgs.nur.repos.dukzcry) wireless-regdb;
   crda = super.crda.overrideAttrs (oldAttrs: rec {

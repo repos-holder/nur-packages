@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.services.hardware;
   any' = l: any (x: x == config.networking.hostName) l;
-  laptop = any' [ "li-si-tsin" ];
+  laptop = any' [ "li-si-tsin" "si-ni-tsin" ];
   server = any' [ "robocat" ];
 in {
   inherit imports;
@@ -30,23 +30,16 @@ in {
       systemd.watchdog.kexecTime = "10m";
       powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
     })
-    (mkIf (cfg.enable && laptop) {
-      hardware.bluetooth.enable = true;
+    (mkIf (cfg.enable && config.networking.hostName == "li-si-tsin") {
       services.upower = {
-        enable = true;
         # hybrid sleep hangs
         criticalPowerAction = "Hibernate";
-        percentageLow = 7;
-        percentageCritical = 6;
-        percentageAction = 5;
       };
-      boot.blacklistedKernelModules = [ "uvcvideo" ];
       boot.kernelParams = [ "mitigations=off" ];
       boot.extraModprobeConfig = ''
         options snd-hda-intel model=dell-headset-multi
       '';
       services.tlp = {
-        enable = true;
         settings = {
           CPU_SCALING_GOVERNOR_ON_AC = "powersave";
           CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
@@ -70,6 +63,48 @@ in {
           dpi = 144;
         };
         scale = 1.3;
+      };
+      hardware.monitor.monitorPort = "DP-1";
+    })
+    (mkIf (cfg.enable && config.networking.hostName == "si-ni-tsin") {
+      powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
+      services.tlp = {
+        settings = {
+          CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
+          CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
+        };
+      };
+      boot.extraModulePackages = with config.boot.kernelPackages; [ rtw8852be ];
+      boot.kernelPackages = pkgs.linuxPackages_latest;
+      hardware.monitor.config = {
+        name = "eDP";
+        setup = "00ffffffffffff0009e5920a0000000013200104a51e137803ee96a3544c99260f4e510000000101010101010101010101010101010160d200a0a0403260302035002ebd10000018c89d00a0a0403260302035002ebd10000018000000fd003078c6c636010a202020202020000000fe004e4531343051444d2d4e5832200164701379000003011430690005ff099f002f001f003f0631000200040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004d90";
+        config = {
+          enable = true;
+          mode = "2560x1600";
+          # scale doesn't work correctly
+          transform = [
+            [ 1.0 0.0 0.0 ]
+            [ 0.0 1.0 0.0 ]
+            [ 0.0 0.0 1.0 ]
+          ];
+          dpi = 144;
+        };
+        scale = 1.0;
+      };
+      hardware.monitor.monitorPort = "DisplayPort-0";
+    })
+    (mkIf (cfg.enable && laptop) {
+      hardware.bluetooth.enable = true;
+      services.upower = {
+        enable = true;
+        percentageLow = 7;
+        percentageCritical = 6;
+        percentageAction = 5;
+      };
+      boot.blacklistedKernelModules = [ "uvcvideo" ];
+      services.tlp = {
+        enable = true;
       };
       programs.light.enable = true;
       users.users.${cfg.user}.extraGroups = [ "video" ];

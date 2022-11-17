@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+    broken = (kernel == null);
     maintainers = with maintainers; [ ];
   };
 }
