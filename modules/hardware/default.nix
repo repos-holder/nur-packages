@@ -30,6 +30,21 @@ in {
       systemd.watchdog.kexecTime = "10m";
       powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
     })
+    (mkIf (cfg.enable && laptop) {
+      hardware.bluetooth.enable = true;
+      services.upower = {
+        enable = true;
+        percentageLow = 7;
+        percentageCritical = 6;
+        percentageAction = 5;
+      };
+      boot.blacklistedKernelModules = [ "uvcvideo" ];
+      services.tlp = {
+        enable = true;
+      };
+      programs.light.enable = true;
+      users.users.${cfg.user}.extraGroups = [ "video" ];
+    })
     (mkIf (cfg.enable && config.networking.hostName == "li-si-tsin") {
       services.upower = {
         # hybrid sleep hangs
@@ -112,21 +127,6 @@ in {
         scale = 1.0;
       };
       hardware.monitor.monitorPort = "DisplayPort-0";
-    })
-    (mkIf (cfg.enable && laptop) {
-      hardware.bluetooth.enable = true;
-      services.upower = {
-        enable = true;
-        percentageLow = 7;
-        percentageCritical = 6;
-        percentageAction = 5;
-      };
-      boot.blacklistedKernelModules = [ "uvcvideo" ];
-      services.tlp = {
-        enable = true;
-      };
-      programs.light.enable = true;
-      users.users.${cfg.user}.extraGroups = [ "video" ];
     })
   ];
 }
