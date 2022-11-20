@@ -67,6 +67,15 @@ in {
       hardware.monitor.monitorPort = "DP-1";
     })
     (mkIf (cfg.enable && config.networking.hostName == "si-ni-tsin") {
+      # wait for 6.1 kernel
+      boot.extraModulePackages = with config.boot.kernelPackages; [ rtw8852be ];
+      # keyboard support
+      boot.kernelPackages = pkgs.linuxPackages_latest;
+      # mic support
+      boot.kernelPatches = [{
+        name = "acp6x-mach";
+        patch = ./patch-acp6x-mach;
+      }];
       powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
       services.tlp = {
         settings = {
@@ -74,8 +83,6 @@ in {
           CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
         };
       };
-      boot.extraModulePackages = with config.boot.kernelPackages; [ rtw8852be ];
-      boot.kernelPackages = pkgs.linuxPackages_latest;
       hardware.monitor.config = {
         name = "eDP";
         setup = "00ffffffffffff0009e5920a0000000013200104a51e137803ee96a3544c99260f4e510000000101010101010101010101010101010160d200a0a0403260302035002ebd10000018c89d00a0a0403260302035002ebd10000018000000fd003078c6c636010a202020202020000000fe004e4531343051444d2d4e5832200164701379000003011430690005ff099f002f001f003f0631000200040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004d90";
