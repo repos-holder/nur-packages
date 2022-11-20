@@ -71,11 +71,18 @@ in {
       boot.extraModulePackages = with config.boot.kernelPackages; [ rtw8852be ];
       # keyboard support
       boot.kernelPackages = pkgs.linuxPackages_latest;
-      # mic support
-      boot.kernelPatches = [{
-        name = "acp6x-mach";
-        patch = ./patch-acp6x-mach;
-      }];
+      boot.kernelPatches = [
+        # mic support
+        {
+          name = "acp6x-mach";
+          patch = ./patch-acp6x-mach;
+        }
+        # bluetooth
+        {
+          name = "btusb";
+          patch = ./patch-btusb;
+        }
+      ];
       powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
       services.tlp = {
         settings = {

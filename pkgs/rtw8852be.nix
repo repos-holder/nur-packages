@@ -6,7 +6,7 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   pname = "rtw8852be";
-  version = "${kernel.version}-2022-10-10";
+  version = "2022-10-10";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
