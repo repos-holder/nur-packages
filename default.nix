@@ -19,7 +19,6 @@ rec {
   k380-function-keys-conf = callPackage ./pkgs/k380-function-keys-conf.nix { };
   knobkraft-orm = callPackage ./pkgs/knobkraft-orm.nix { };
   realrtcw = callPackage ./pkgs/realrtcw.nix { };
-  gamescope = callPackage ./pkgs/gamescope.nix { };
   re3 = callPackage ./pkgs/re3 {};
   revc = callPackage ./pkgs/re3/revc.nix { inherit re3; };
   bitwig-studio3 = callPackage ./pkgs/bitwig-studio3.nix {};
