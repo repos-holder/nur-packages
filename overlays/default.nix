@@ -32,6 +32,30 @@ rec {
         --prefix PATH : "${super.lib.makeBinPath [ super.mpv ]}"
     '';
   });
+  # https://github.com/jellyfin/jellyfin/issues/7642
+  jellyfin-ffmpeg = super.jellyfin-ffmpeg.override (optionalAttrs (config.services.jellyfin.enable or false) {
+    ffmpeg-full = super.ffmpeg-full.override {
+      libva = let
+        mesa = super.mesa.overrideAttrs (oldAttrs: rec {
+          nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ super.gnused ];
+          postPatch = ''
+            ${oldAttrs.postPatch}
+            MESA_VA_PIC="./src/gallium/frontends/va/picture.c"
+            MESA_VA_CONF="./src/gallium/frontends/va/config.c"
+            sed -i 's|handleVAEncPackedHeaderParameterBufferType(context, buf);||g' ${MESA_VA_PIC}
+            sed -i 's|handleVAEncPackedHeaderDataBufferType(context, buf);||g' ${MESA_VA_PIC}
+            sed -i 's|if (u_reduce_video_profile(ProfileToPipe(profile)) == PIPE_VIDEO_FORMAT_HEVC)|if (0)|g' ${MESA_VA_CONF}
+            # force reporting all packed headers are supported
+            sed -i 's|value = VA_ENC_PACKED_HEADER_NONE;|value = 0x0000001f;|g' ${MESA_VA_CONF}
+            sed -i 's|if (attrib_list\[i\].type == VAConfigAttribEncPackedHeaders)|if (0)|g' ${MESA_VA_CONF}
+            exit 1
+          '';
+        });
+      in super.libva.overrideAttrs (oldAttrs: rec {
+        mesonFlags = [ "-Ddriverdir=${mesa.drivers}/lib/dri" ];
+      });
+    };
+  });
   evolution = super.symlinkJoin {
     name = "evolution-without-background-processes";
     paths = with super; [
