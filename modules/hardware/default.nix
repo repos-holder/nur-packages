@@ -88,10 +88,11 @@ in {
       };
     })
     (mkIf (cfg.enable && config.networking.hostName == "si-ni-tsin") {
+      # keyboard
+      boot.kernelPackages = pkgs.linuxPackages_6_0;
       # wait for 6.1 kernel
       boot.extraModulePackages = with config.boot.kernelPackages; [ rtw8852be ];
-      # keyboard
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      # wait for 6.2 kernel
       boot.kernelPatches = [
         # mic
         {
@@ -103,6 +104,17 @@ in {
           name = "btusb";
           patch = ./patch-btusb;
         }
+      ];
+      # acpi bug
+      boot.initrd.prepend = with pkgs.nur.repos.dukzcry; [
+        ''
+          ${dsdt {
+            src = ./dsdt.dsl;
+            patches = [
+              ./patch-bios-bug
+            ];
+          }}/dsdt
+        ''
       ];
       powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
       services.tlp = {
