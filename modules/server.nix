@@ -14,6 +14,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    system.fsPackages = [ pkgs.nfs-utils ];
     systemd.mounts = [{
       type = "nfs";
       what = "robocat:/data";
