@@ -67,15 +67,9 @@ in {
         config = {
           enable = true;
           mode = "1920x1080";
-          # scale doesn't work correctly
-          transform = [
-            [ 1.0 0.0 0.0 ]
-            [ 0.0 1.0 0.0 ]
-            [ 0.0 0.0 1.0 ]
-          ];
-          dpi = 96;
         };
-        scale = 1.0;
+        dpi = 96;
+        size = 16;
       };
       hardware.monitor.monitorPort = "DP-1";
       services.picom = {
