@@ -56,7 +56,7 @@ in {
 
       virtualisation.libvirtd.enable = lib.mkForce false;
 
-      networking.edgevpn = optionalAttrs cfg.vpn {
+      networking.edgevpn = {
         enable = true;
         logLevel = "debug";
         router = "10.0.1.1";
