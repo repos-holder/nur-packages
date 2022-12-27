@@ -42,9 +42,6 @@ in {
         criticalPowerAction = "Hibernate";
       };
       boot.blacklistedKernelModules = [ "uvcvideo" ];
-      services.tlp = {
-        enable = true;
-      };
       programs.light.enable = true;
       users.users.${cfg.user}.extraGroups = [ "video" ];
       boot.kernelParams = [ "mitigations=off" ];
@@ -52,6 +49,7 @@ in {
         options snd-hda-intel model=dell-headset-multi
       '';
       services.tlp = {
+        enable = true;
         settings = {
           CPU_SCALING_GOVERNOR_ON_AC = "powersave";
           CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
