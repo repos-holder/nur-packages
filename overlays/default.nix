@@ -42,6 +42,9 @@ rec {
       };
     };
   });
+  linuxPackages = super.linuxPackages.extend (lpself: lpsuper: {
+    ath10k-ct = pkgs.nur.repos.dukzcry.ath10k-ct.override { kernel = super.linuxPackages.kernel; };
+  });
 } // optionalAttrs (config.hardware.regdomain.enable or false) {
   inherit (pkgs.nur.repos.dukzcry) wireless-regdb;
   crda = super.crda.overrideAttrs (oldAttrs: rec {
