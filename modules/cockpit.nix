@@ -3,41 +3,23 @@
 with lib;
 let
   cpkgs = pkgs.nur.repos.dukzcry;
-  cfg = config.services.cockpit;
-  format = pkgs.formats.ini { };
-  conf = format.generate "cockpit.conf" cfg.settings;
+  cfg = config.programs.cockpit;
 in {
-  options.services.cockpit = {
+  options.programs.cockpit = {
     enable = mkEnableOption ''
-      Cockpit web-based graphical interface for servers
+      Cockpit with cockpit-machines
     '';
-    port = mkOption {
-      type = types.port;
-      default = 9090;
-    };
-    settings = mkOption {
-      type = format.type;
-      default = { };
-    };
   };
 
   config = mkIf cfg.enable {
-    systemd.packages = with cpkgs; [ (cockpit.override { packages = with pkgs; [ virtmanager ]; }) ];
-    systemd.sockets.cockpit.wantedBy = [ "sockets.target" ];
-
-    system.activationScripts = {
-      cockpit = ''
-        mkdir -p /etc/cockpit/ws-certs.d
-        chmod 755 /etc/cockpit/ws-certs.d
-        cp ${conf} /etc/cockpit/cockpit.conf
-      '';
+    services.cockpit.enable = true;
+    services.cockpit.port = 9092;
+    services.cockpit.settings = {
+      WebService = {
+        AllowUnencrypted = true;
+      };
     };
 
-    security.pam.services.cockpit = {};
-
-    environment.systemPackages = with cpkgs; [ cockpit cockpit-machines libvirt-dbus ];
-    environment.pathsToLink = [ "/share/cockpit" ];
-
-    systemd.sockets.cockpit.listenStreams = [ "" "${toString cfg.port}" ];
+    environment.systemPackages = with pkgs; with cpkgs; [ cockpit-machines libvirt-dbus virtmanager ];
   };
 }
