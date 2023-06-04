@@ -11,7 +11,7 @@ let
   isQGnome = cfg.platformTheme == "gtk3" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
 
-  packages = if isQGnome then with pkgs; [ adwaita-qt ]
+  packages = if isQGnome then with pkgs; [ adwaita-qt adwaita-qt6 ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
 
@@ -99,6 +99,13 @@ in
     environment.variables.QT_QPA_PLATFORMTHEME = cfg.platformTheme;
 
     environment.variables.QT_STYLE_OVERRIDE = cfg.style;
+
+    environment.profileRelativeSessionVariables = let
+      qtVersions = with pkgs; [ qt5 qt6 ];
+    in {
+      QT_PLUGIN_PATH = map (qt: "/${qt.qtbase.qtPluginPrefix}") qtVersions;
+      QML2_IMPORT_PATH = map (qt: "/${qt.qtbase.qtQmlPrefix}") qtVersions;
+    };
 
     environment.systemPackages = packages;
 
