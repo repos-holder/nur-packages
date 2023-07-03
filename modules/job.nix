@@ -45,7 +45,6 @@ in {
               vpn.renins.ru
         ''
       )];
-      environment.etc.hosts.mode = "0644";
       networking.firewall.extraCommands = ''
         iptables -t nat -A POSTROUTING -o job -j MASQUERADE
       '';
