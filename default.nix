@@ -21,7 +21,7 @@ rec {
   realrtcw = callPackage ./pkgs/realrtcw.nix { };
   re3 = callPackage ./pkgs/re3 {};
   revc = callPackage ./pkgs/re3/revc.nix { inherit re3; };
-  bitwig-studio3 = callPackage ./pkgs/bitwig-studio3.nix {};
+  bitwig-studio5 = callPackage ./pkgs/bitwig-studio5.nix {};
   massdns = callPackage ./pkgs/massdns.nix {};
   wireless-regdb = callPackage ./pkgs/wireless-regdb {};
   edgevpn = callPackage ./pkgs/edgevpn {};
@@ -37,4 +37,5 @@ rec {
   aml-upgrade-package-extract = callPackage ./pkgs/aml-upgrade-package-extract.nix {};
   dsdt = callPackage ./pkgs/dsdt.nix;
   ath10k-firmware = callPackage ./pkgs/ath10k-firmware.nix {};
+  cubesuite = callPackage ./pkgs/cubesuite.nix { wrapWine = pkgs.nur.repos.lucasew.packages.wrapWine or null; };
 }
